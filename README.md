@@ -191,6 +191,11 @@ HotkeyInventoryViewTests     — search aliasing, keycap tokenizing, conflict ma
 
 Run with `swift test`.
 
+## Development
+
+Design rationale, conventions, gotchas, and "how to add an action/condition type"
+guides live in [`docs/DEVELOPMENT.md`](docs/DEVELOPMENT.md).
+
 ## License
 
 Licensed under the **Apache License, Version 2.0**. See [`LICENSE`](LICENSE).
