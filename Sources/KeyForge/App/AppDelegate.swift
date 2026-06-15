@@ -32,7 +32,7 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
 
     public func applicationDidFinishLaunching(_ notification: Notification) {
         Logger.shared.info("KeyForge starting up")
-        installStatusItem()
+        syncMenuBarVisibility()
         // Start engine
         EventTapManager.shared.setChordTimeout(settings.chordTimeoutMS)
         EventTapManager.shared.updateMacros(macros: store.macros, groups: store.groups)
@@ -90,6 +90,7 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
                 EventTapManager.shared.globallyEnabled = self.settings.globalHotkeysEnabled
                 EventTapManager.shared.setChordTimeout(self.settings.chordTimeoutMS)
                 EventTapManager.shared.snippetEngine.isEnabled = self.settings.snippetsEnabled
+                self.syncMenuBarVisibility()
                 Task { @MainActor in
                     await EventTapManager.shared.executor.setTimeout(Double(self.settings.actionTimeoutMS) / 1000.0)
                 }
@@ -110,6 +111,14 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
         store.saveImmediately()
         EventTapManager.shared.stop()
         AccessibilityHelper.shared.stopPolling()
+    }
+
+    // Relaunching KeyForge (e.g. double-clicking it in Finder, or `open`-ing it)
+    // while an instance is already running brings the editor back. This is the
+    // primary way to recover the UI when the menu bar icon is hidden.
+    public func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        if !flag { openMainWindow() }
+        return true
     }
 
     public func application(_ sender: NSApplication, openFile filename: String) -> Bool {
@@ -135,6 +144,20 @@ public final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegat
     }
 
     // MARK: - Status item
+
+    /// Adds or removes the menu bar status item to match `settings.hideMenuBarIcon`.
+    /// When hidden, KeyForge keeps running headless — hotkeys still fire — and the
+    /// editor is recovered by relaunching the app (see `applicationShouldHandleReopen`).
+    private func syncMenuBarVisibility() {
+        if settings.hideMenuBarIcon {
+            if let item = statusItem {
+                NSStatusBar.system.removeStatusItem(item)
+                statusItem = nil
+            }
+        } else if statusItem == nil {
+            installStatusItem()
+        }
+    }
 
     private func installStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)

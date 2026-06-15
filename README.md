@@ -143,7 +143,7 @@ Actions use a discriminated union: each action object is `{"type": "<kind>", "pa
 
 A `Settings { }` scene exposes four tabs:
 
-- **General** — launch at login (`SMAppService`), global enable/disable, conflict detection strictness, chord timeout (200–1000ms).
+- **General** — launch at login (`SMAppService`), global enable/disable, hide menu bar icon (run headless in the background; relaunch the app to reopen the editor), conflict detection strictness, chord timeout (200–1000ms).
 - **Snippets** — global on/off; per-snippet editing lives in the main window's Snippets sheet.
 - **Advanced** — action timeout (1s–60s), log verbosity, export debug log button.
 - **Permissions** — live AX permission status with a direct "Open System Settings" link.

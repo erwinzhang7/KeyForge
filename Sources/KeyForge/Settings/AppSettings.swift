@@ -8,6 +8,7 @@ public final class AppSettings: ObservableObject {
 
     @AppStorage("globalHotkeysEnabled") public var globalHotkeysEnabled: Bool = true
     @AppStorage("snippetsEnabled") public var snippetsEnabled: Bool = true
+    @AppStorage("hideMenuBarIcon") public var hideMenuBarIcon: Bool = false
     @AppStorage("launchAtLogin") public var launchAtLogin: Bool = false
     @AppStorage("chordTimeoutMS") public var chordTimeoutMS: Int = 500
     @AppStorage("actionTimeoutMS") public var actionTimeoutMS: Int = 10_000

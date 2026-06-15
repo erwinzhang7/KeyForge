@@ -37,6 +37,12 @@ public struct SettingsView: View {
                     }
                 }
             Toggle("Global hotkeys enabled", isOn: $settings.globalHotkeysEnabled)
+            VStack(alignment: .leading, spacing: 2) {
+                Toggle("Hide menu bar icon (keep running in background)", isOn: $settings.hideMenuBarIcon)
+                Text("KeyForge keeps running and your hotkeys still fire. To reopen this window, launch KeyForge again from Finder or Spotlight.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Toggle("Strict conflict detection (warn on system shortcuts)", isOn: $settings.conflictDetectionStrict)
             HStack {
                 Text("Chord timeout: \(settings.chordTimeoutMS) ms")
